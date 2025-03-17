@@ -1,0 +1,8 @@
+package chatroom:client-exports;
+
+interface chatroom-client-api {
+  add: func(value: u64);
+  get: func() -> u64;
+}
+
+interface chatroom-client-inline-functions {}

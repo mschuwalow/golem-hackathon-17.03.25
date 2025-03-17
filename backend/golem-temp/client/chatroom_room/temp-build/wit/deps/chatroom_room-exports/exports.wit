@@ -1,0 +1,10 @@
+package chatroom:room-exports;
+
+interface chatroom-room-api {
+  use chatroom:common/types.{ message };
+  join: func(client-worker-name: string);
+  leave: func(client-worker-name: string);
+  send: func(client-worker-name: string, msg: message);
+}
+
+interface chatroom-room-inline-functions {}

@@ -1,0 +1,17 @@
+id: chatroom-v1
+draft: true
+version: 0.0.4
+routes:
+  - method: Post
+    path: /v1/rooms/{room-name}/join
+    binding:
+      type: wit-worker
+      componentId:
+        componentId: "f9c6bdc9-c410-42d1-977a-fddf12cc605c"
+        version: 0
+      worker-name: |
+        request.path.room-name
+      response: |
+        let user: string = request.body.user_id;
+        chatroom:room-exports/chatroom-room-api.{{join}}(user)
+        {status: 200}

@@ -1,0 +1,13 @@
+package chatroom:inbox-exports;
+
+interface chatroom-inbox-api {
+  use chatroom:common/types.{ message };
+  record message-with-id {
+    id: u64,
+    payload: message,
+  }
+  poll-messages: func(after: u64, batch-size: u8) -> list<message-with-id>;
+  receive-message: func(msg: message);
+}
+
+interface chatroom-inbox-inline-functions {}

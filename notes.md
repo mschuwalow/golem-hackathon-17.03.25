@@ -16,3 +16,7 @@
 |                                  ---------------------- ^^^^^^^^^^^ expected `bindings::golem::rpc::types::Uri`, found `golem_rust::bindings::golem::rpc::types::Uri`
 * we need some kind of worker-local database (rocksdb, sqlite, ...)
 * worker_uri and friends should be associated methods on generated clients
+* component id in the gateway binding
+* no component id in `golem app deploy`. Needed for api definition
+* no way of getting component_id at all
+* no quick command to check golem-cli version

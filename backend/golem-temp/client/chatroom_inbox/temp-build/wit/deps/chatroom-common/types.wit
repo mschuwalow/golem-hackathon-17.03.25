@@ -1,0 +1,9 @@
+package chatroom:common;
+
+interface types {
+
+    record message {
+        body: string
+    }
+
+}

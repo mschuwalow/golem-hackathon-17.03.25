@@ -1,0 +1,11 @@
+package chatroom:room;
+
+world chatroom-room {
+  import chatroom:common/types;
+  import golem:api/host@1.1.5;
+  import golem:rpc/types@0.1.3;
+  import wasi:clocks/monotonic-clock@0.2.0;
+  import wasi:clocks/wall-clock@0.2.0;
+  import wasi:io/poll@0.2.0;
+  export chatroom:room-exports/chatroom-room-api;
+}
