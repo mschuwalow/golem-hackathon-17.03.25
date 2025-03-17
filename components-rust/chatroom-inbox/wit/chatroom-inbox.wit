@@ -1,0 +1,20 @@
+package chatroom:inbox;
+
+// See https://component-model.bytecodealliance.org/design/wit.html for more details about the WIT syntax
+
+interface chatroom-inbox-api {
+  use chatroom:common/types.{message};
+
+  record message-with-id {
+    id: u64,
+    payload: message
+  }
+
+  receive-message: func(msg: message);
+
+  poll-messages: func(after: u64, batch-size: u8) -> list<message-with-id>;
+}
+
+world chatroom-inbox {
+  export chatroom-inbox-api;
+}

@@ -1,0 +1,18 @@
+package chatroom:room;
+
+// See https://component-model.bytecodealliance.org/design/wit.html for more details about the WIT syntax
+
+interface chatroom-room-api {
+  use chatroom:common/types.{message};
+
+  join: func(client-worker-name: string);
+  leave: func(client-worker-name: string);
+
+  send: func(client-worker-name: string, msg: message);
+}
+
+world chatroom-room {
+  import golem:api/host@1.1.5;
+
+  export chatroom-room-api;
+}
