@@ -7,7 +7,7 @@ interface chatroom-inbox-api {
 
   record message-with-id {
     id: u64,
-    payload: message
+    message: message
   }
 
   receive-message: func(msg: message);

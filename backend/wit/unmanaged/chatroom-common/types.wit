@@ -3,6 +3,7 @@ package chatroom:common;
 interface types {
 
     record message {
+        sender: string,
         body: string
     }
 

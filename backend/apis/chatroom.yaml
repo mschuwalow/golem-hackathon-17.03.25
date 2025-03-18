@@ -1,17 +1,50 @@
 id: chatroom-v1
-draft: true
-version: 0.0.4
+draft: false
+version: 0.0.9
 routes:
   - method: Post
-    path: /v1/rooms/{room-name}/join
+    path: "/v1/rooms/{room-name}/join"
     binding:
       type: wit-worker
       componentId:
-        componentId: "f9c6bdc9-c410-42d1-977a-fddf12cc605c"
+        componentId: "2cbb3e7e-6120-4aef-bce9-18b75c0b9bee"
         version: 0
-      worker-name: |
-        request.path.room-name
+      # worker-name: |
+      #   request.path.room-name
       response: |
+        let worker-name: string = request.path.room-name;
+        let worker = instance(worker-name);
         let user: string = request.body.user_id;
-        chatroom:room-exports/chatroom-room-api.{{join}}(user)
+        worker.join(user);
         {status: 200}
+  - method: Post
+    path: "/v1/rooms/{room-name}/messages"
+    binding:
+      type: wit-worker
+      componentId:
+        componentId: "2cbb3e7e-6120-4aef-bce9-18b75c0b9bee"
+        version: 0
+      # worker-name: |
+      #   request.path.room-name
+      response: |
+        let worker-name: string = request.path.room-name;
+        let worker = instance(worker-name);
+        let user: string = request.body.user_id;
+        let message: string = request.body.message;
+        worker.send(user, { body: message });
+        {status: 200}
+  - method: Get
+    path: "/v1/inboxes/{user-id}/messages?{after}&{limit}"
+    binding:
+      type: wit-worker
+      componentId:
+        componentId: "a9612a2e-799a-4ebc-a252-39e7bc500f1d"
+        version: 0
+      response: |
+        let user-id: string = request.path.user-id;
+        let worker = instance(user-id);
+        let after: u64 = request.path.after;
+        let limit: u8 = request.path.limit;
+        let response = worker.poll-messages(after, limit);
+        let body = { messages: response };
+        {status: 200, body: body }

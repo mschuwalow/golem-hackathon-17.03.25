@@ -53,6 +53,7 @@ impl Guest for Component {
                     worker_name: client_worker_name.clone()
                 });
                 let client_api = ChatroomInboxApi::new(&client_uri);
+                println!("Fowarding message to {client_worker_name}");
                 client_api.receive_message(&msg);
             }
         }

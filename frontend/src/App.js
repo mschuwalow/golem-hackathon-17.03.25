@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const baseURL = 'YOUR_BACKENDED_API_URL'; // Replace with your actual API URL
+const baseURL = 'http://localhost:9006';
 
 function generateUserID() {
    return 'user_' + Date.now();
@@ -9,20 +9,20 @@ function generateUserID() {
 export function App() {
   const [userID, _] = useState(generateUserID());
   const [rooms, setRooms] = useState(['global']); // Default room, update from backend later if possible
-  const [currentRoom, setCartCurrentRoom] = useState('room-1');
+  const [currentRoom, setCurrentRoom] = useState('global');
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-  const [lastMID, setLastMID] = useState(null);
+  const [lastMID, setLastMID] = useState(0);
   const[newRoomName, setNewRoomName] = useState('');
 
-  useEffect(() => {
-      const fetchInitialMessages = async () => {
-          const initialMessages = await fetchMessages(lastMID);
-            setMessages(initialMessages);
-    };
+  // useEffect(() => {
+  //     const fetchInitialMessages = async () => {
+  //         const initialMessages = await fetchMessages(lastMID);
+  //           setMessages(initialMessages);
+  //   };
 
-    fetchInitialMessages();
-  },[currentRoom,lastMID]);
+  //   fetchInitialMessages();
+  // },[currentRoom,lastMID]);
 
   const handleUserJoin = async () => {
     // Make a PUT/POST call or just add dynamically for now
@@ -56,8 +56,7 @@ export function App() {
   };
 
   const changeCurrentRoom = async (newRoom) => {
-    setCartCurrentRoom(newRoom);
-
+    setCurrentRoom(newRoom);
   };
 
   const fetchMessages = async (lastMID) => {
@@ -65,15 +64,10 @@ export function App() {
       const response = await fetch(`${baseURL}/users/${currentRoom}/messages`);
       const newMessages = await response.json();
       setMessages(newMessages);
-      if (newMessages.length > 0) {
-        setLastMID(newMessages[newMessages.length - 1].mid);
-      }
-
     } catch (error) {
       console.error('Error fetching messages',error);
     }
   }
-
 
   return (
     <div style={{ display: 'flex' }}>
