@@ -1,31 +1,36 @@
 id: chatroom-v1
 draft: false
-version: 0.0.9
+version: 0.0.11
 routes:
+  - method: Options
+    path: /v1/rooms/{room-name}/join
+    binding:
+      bindingType: cors-preflight
   - method: Post
-    path: "/v1/rooms/{room-name}/join"
+    path: /v1/rooms/{room-name}/join
     binding:
       type: wit-worker
       componentId:
         componentId: "856fe6c9-b7b0-4d26-ba62-4343f83502b4"
         version: 0
-      # worker-name: |
-      #   request.path.room-name
       response: |
         let worker-name: string = request.path.room-name;
         let worker = instance(worker-name);
         let user: string = request.body.user_id;
         worker.join(user);
         {status: 200}
+
+  - method: Options
+    path: /v1/rooms/{room-name}/messages
+    binding:
+      bindingType: cors-preflight
   - method: Post
-    path: "/v1/rooms/{room-name}/messages"
+    path: /v1/rooms/{room-name}/messages
     binding:
       type: wit-worker
       componentId:
         componentId: "856fe6c9-b7b0-4d26-ba62-4343f83502b4"
         version: 0
-      # worker-name: |
-      #   request.path.room-name
       response: |
         let worker-name: string = request.path.room-name;
         let worker = instance(worker-name);
@@ -33,8 +38,13 @@ routes:
         let message: string = request.body.message;
         worker.send(user, message);
         {status: 200}
+
+  - method: Options
+    path: /v1/inboxes/{user-id}/messages?{after}&{limit}
+    binding:
+      bindingType: cors-preflight
   - method: Get
-    path: "/v1/inboxes/{user-id}/messages?{after}&{limit}"
+    path: /v1/inboxes/{user-id}/messages?{after}&{limit}
     binding:
       type: wit-worker
       componentId:

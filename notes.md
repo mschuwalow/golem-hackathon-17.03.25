@@ -135,3 +135,8 @@ Failed to map input type Record(TypeRecord { fields: [NameTypePair { name: "mess
 ```
 2025-03-18T13:46:05.573910Z ERROR api_request{api="invoke_and_await_worker_typed" api_type="grpc" worker_id="e34fb6b8-4e6d-4cea-915e-ceb93e7e1d5e/room" account_id="-1"}:waiting-for-permits{worker_id="e34fb6b8-4e6d-4cea-915e-ceb93e7e1d5e/room"}:invocation-loop{worker_id="e34fb6b8-4e6d-4cea-915e-ceb93e7e1d5e/room"}:invocation{worker_id=e34fb6b8-4e6d-4cea-915e-ceb93e7e1d5e/room}:replaying{function="chatroom:room-exports/chatroom-room-api.{send}"}: golem_worker_executor_base::durable_host::durability: Unexpected imported function call entry in oplog: expected cli::preopens::get_directories, got golem_environment::get_arguments
 ```
+* response mapping requires accept even with no body
+```
+Failed to map input type Record(TypeRecord { fields: [NameTypePair { name: "status", typ: U64(TypeU64) }] }) to any of the expected content types: "\"*/*\""
+```
+* number in api path parameter cannot be coerced to string
