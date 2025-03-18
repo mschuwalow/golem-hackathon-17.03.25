@@ -48,19 +48,17 @@ impl Guest for Component {
         let client_component_id = resolve_component_id("chatroom:inbox").unwrap();
 
         for client_name in state.connected_clients.iter() {
-            if *client_name != sender {
-                let client_uri = worker_uri(&WorkerId {
-                    component_id: client_component_id.clone(),
-                    worker_name: client_name.clone()
-                });
-                let client_api = ChatroomInboxApi::new(&client_uri);
-                println!("Fowarding message to {client_name}");
-                client_api.receive_message(&RoomMessage {
-                    sender: sender.clone(),
-                    room: room_name.clone(),
-                    body: body.clone()
-                });
-            }
+            let client_uri = worker_uri(&WorkerId {
+                component_id: client_component_id.clone(),
+                worker_name: client_name.clone()
+            });
+            let client_api = ChatroomInboxApi::new(&client_uri);
+            println!("Fowarding message to {client_name}");
+            client_api.receive_message(&RoomMessage {
+                sender: sender.clone(),
+                room: room_name.clone(),
+                body: body.clone()
+            });
         }
     }
 }

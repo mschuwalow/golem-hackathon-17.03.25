@@ -4,6 +4,7 @@ import { useVisibilityChange } from './utils';
 
 const BASE_URL = 'http://localhost:9006/v1';
 const DEFAULT_POLLING_INTERVAL = 1000
+const GLOBAL_ROOM = 'global'
 
 function generateUserID() {
    return 'user_' + Date.now();
@@ -11,16 +12,22 @@ function generateUserID() {
 
 export function App() {
   const [userID, _] = useState(generateUserID());
-  const [rooms, setRooms] = useState([]); // Default room, update from backend later if possible
-  const [currentRoom, setCurrentRoom] = useState(null);
+  const [rooms, setRooms] = useState([GLOBAL_ROOM]); // Default room, update from backend later if possible
+  const [currentRoom, setCurrentRoom] = useState(GLOBAL_ROOM);
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [pollingInterval, setPollingInterval] = useState(DEFAULT_POLLING_INTERVAL);
+  const [joinedGlobal, setJoinedGlobal] = useState(false);
   const isPageVisible = useVisibilityChange();
 
   let lastMID;
   if (messages.length > 0) {
     lastMID = messages[messages.length - 1].id;
+  };
+
+  if (!joinedGlobal) {
+    joinRoom(GLOBAL_ROOM);
+    setJoinedGlobal(true);
   };
 
   useEffect(() => {
@@ -66,7 +73,7 @@ export function App() {
     refresh();
   }, pollingInterval);
 
-  const sendMessage = async () => {
+  async function sendMessage() {
     try {
       const body = { message: inputText, user_id: userID };
       await fetch(`${BASE_URL}/rooms/${currentRoom}/messages`, {
@@ -82,9 +89,17 @@ export function App() {
     }
   };
 
-  const changeCurrentRoom = async (newRoom) => {
+  function changeCurrentRoom(newRoom) {
     setCurrentRoom(newRoom);
   };
+
+  function displaySender(sender) {
+    if (sender == userID) {
+      return "you"
+    } else {
+      return sender
+    }
+  }
 
   return (
     <div style={{ display: 'flex' }}>
@@ -135,7 +150,7 @@ export function App() {
         <div style={{ height: '300px', overflowY: 'scroll', marginBottom: '10px' }}>
           {messages.filter(m => m.message.room == currentRoom).map(message => (
                 <div key={message.id}>
-                  {message.message.body} ({message.message.sender})
+                  {message.message.body} ({displaySender(message.message.sender)})
                 </div>
            ))}
         </div>

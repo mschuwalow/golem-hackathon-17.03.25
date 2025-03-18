@@ -36,7 +36,7 @@ impl Guest for Component {
     fn poll_messages(after: u64, batch_size: u8) -> Vec<MessageWithId> {
         let state = STATE.lock().unwrap();
         let start_index = usize::try_from(after).unwrap();
-        let end_index = (start_index + usize::from(batch_size)).min(state.message_buffer.len().saturating_sub(1));
+        let end_index = (start_index + usize::from(batch_size)).min(state.message_buffer.len());
         state.message_buffer[start_index..end_index]
             .iter()
             .enumerate()

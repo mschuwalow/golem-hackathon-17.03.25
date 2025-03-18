@@ -140,3 +140,7 @@ Failed to map input type Record(TypeRecord { fields: [NameTypePair { name: "mess
 Failed to map input type Record(TypeRecord { fields: [NameTypePair { name: "status", typ: U64(TypeU64) }] }) to any of the expected content types: "\"*/*\""
 ```
 * number in api path parameter cannot be coerced to string
+* golem worker update times out:
+```
+Worker Service - Error: 500 Internal Server Error, Unknown error: Failed to connect to pod: The operation was cancelled h2 protocol error: http2 error
+```
