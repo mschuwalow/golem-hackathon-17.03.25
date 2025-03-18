@@ -33,9 +33,14 @@ impl Guest for Component {
         state.message_buffer.push(msg);
     }
 
-    fn poll_messages(after: u64, batch_size: u8) -> Vec<MessageWithId> {
+    fn poll_messages(from: u64, batch_size: u8) -> Vec<MessageWithId> {
         let state = STATE.lock().unwrap();
-        let start_index = usize::try_from(after).unwrap();
+        let start_index = usize::try_from(from).unwrap();
+
+        if start_index >= state.message_buffer.len() {
+            return vec![];
+        };
+
         let end_index = (start_index + usize::from(batch_size)).min(state.message_buffer.len());
         state.message_buffer[start_index..end_index]
             .iter()

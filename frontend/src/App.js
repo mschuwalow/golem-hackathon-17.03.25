@@ -51,9 +51,13 @@ export function App() {
 
   async function refresh() {
     try {
-      let after = lastMID ?? 0;
+      let nextMid = lastMID == null ? 0 : lastMID + 1;
+      let searchParams = new URLSearchParams({
+        limit: 50,
+        from: nextMid
+      });
       const response = await fetch(
-        `${BASE_URL}/inboxes/${userID}/messages?after=${after}&limit=50`,
+        `${BASE_URL}/inboxes/${userID}/messages?${searchParams}`,
         {
           headers: { 'accept': 'application/json' }
         }
@@ -61,8 +65,7 @@ export function App() {
       const jsonResponse = await response.json();
       const newMessages = jsonResponse.messages;
       if (newMessages.length > 0) {
-        let midToAdd = lastMID ?? -1;
-        setMessages([...messages, ...newMessages.filter(m => m.id > midToAdd)]);
+        setMessages([...messages, ...newMessages.filter(m => m.id >= nextMid)]);
       }
     } catch (error) {
       console.error('Error fetching messages',error);

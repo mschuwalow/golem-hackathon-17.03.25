@@ -1,6 +1,6 @@
 id: chatroom-v1
 draft: false
-version: 0.0.11
+version: 0.0.14
 routes:
   - method: Options
     path: /v1/rooms/{room-name}/join
@@ -11,7 +11,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: f26bee92-2773-4f9d-bb9e-ab7a91e2c19f
+        componentId: 8668db93-be43-4971-889b-6df1eff90a69
         version: 0
       response: |
         let worker-name: string = request.path.room-name;
@@ -29,7 +29,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: f26bee92-2773-4f9d-bb9e-ab7a91e2c19f
+        componentId: 8668db93-be43-4971-889b-6df1eff90a69
         version: 0
       response: |
         let worker-name: string = request.path.room-name;
@@ -40,21 +40,21 @@ routes:
         {status: 200}
 
   - method: Options
-    path: /v1/inboxes/{user-id}/messages?{after}&{limit}
+    path: /v1/inboxes/{user-id}/messages?{from}&{limit}
     binding:
       bindingType: cors-preflight
   - method: Get
-    path: /v1/inboxes/{user-id}/messages?{after}&{limit}
+    path: /v1/inboxes/{user-id}/messages?{from}&{limit}
     binding:
       type: wit-worker
       componentId:
-        componentId: 99572d2b-1a32-4381-93e1-fb8560f7260e
+        componentId: cc54a0f3-5d2b-4881-aca6-01af5facd0c4
         version: 0
       response: |
         let user-id: string = request.path.user-id;
         let worker = instance(user-id);
-        let after: u64 = request.path.after;
+        let from: u64 = request.path.from;
         let limit: u8 = request.path.limit;
-        let response = worker.poll-messages(after, limit);
+        let response = worker.poll-messages(from, limit);
         let body = { messages: response };
         {status: 200, body: body }

@@ -144,3 +144,13 @@ Failed to map input type Record(TypeRecord { fields: [NameTypePair { name: "stat
 ```
 Worker Service - Error: 500 Internal Server Error, Unknown error: Failed to connect to pod: The operation was cancelled h2 protocol error: http2 error
 ```
+* worker executor dies and doesn't recover:
+```
+thread 'tokio-runtime-worker' panicked at /home/mschuwalow/.cargo/git/checkouts/golem-f136eb08d75a2850/f783c7b/golem-worker-executor-base/src/worker/mod.rs:1513:58:
+called `Result::unwrap()` on an `Err` value: SendError { .. }
+stack backtrace:
+   0: rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::result::unwrap_failed
+```
+* optional search params
