@@ -2,8 +2,13 @@ package chatroom:common;
 
 interface types {
 
-    record message {
-        sender: string,
+    type room-name = string;
+    type user-id = string;
+    type message-body = string;
+
+    record room-message {
+        room: room-name,
+        sender: user-id,
         body: string
     }
 

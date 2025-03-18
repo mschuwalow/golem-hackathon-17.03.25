@@ -1,6 +1,6 @@
 mod bindings;
 
-use bindings::chatroom::common::types::Message;
+use bindings::chatroom::common::types::RoomMessage;
 
 use crate::bindings::exports::chatroom::inbox_exports::chatroom_inbox_api::*;
 // Import for using common lib:
@@ -12,7 +12,7 @@ use std::sync::{LazyLock, Mutex};
 /// whether that state is local to a function being executed or
 /// global across the entire program.
 struct State {
-    message_buffer: Vec<Message>,
+    message_buffer: Vec<RoomMessage>,
 }
 
 impl Default for State {
@@ -28,7 +28,7 @@ static STATE: LazyLock<Mutex<State>> = LazyLock::new(|| Mutex::new(State::defaul
 struct Component;
 
 impl Guest for Component {
-    fn receive_message(msg: Message) {
+    fn receive_message(msg: RoomMessage) {
         let mut state = STATE.lock().unwrap();
         state.message_buffer.push(msg);
     }

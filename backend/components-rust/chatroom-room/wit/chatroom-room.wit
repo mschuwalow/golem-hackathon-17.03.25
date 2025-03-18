@@ -3,12 +3,12 @@ package chatroom:room;
 // See https://component-model.bytecodealliance.org/design/wit.html for more details about the WIT syntax
 
 interface chatroom-room-api {
-  use chatroom:common/types.{message};
+  use chatroom:common/types.{message-body};
 
   join: func(client-worker-name: string);
   leave: func(client-worker-name: string);
 
-  send: func(client-worker-name: string, msg: message);
+  send: func(sender: string, body: message-body);
 }
 
 world chatroom-room {

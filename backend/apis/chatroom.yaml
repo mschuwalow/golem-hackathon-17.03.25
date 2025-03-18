@@ -7,7 +7,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: "2cbb3e7e-6120-4aef-bce9-18b75c0b9bee"
+        componentId: "856fe6c9-b7b0-4d26-ba62-4343f83502b4"
         version: 0
       # worker-name: |
       #   request.path.room-name
@@ -22,7 +22,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: "2cbb3e7e-6120-4aef-bce9-18b75c0b9bee"
+        componentId: "856fe6c9-b7b0-4d26-ba62-4343f83502b4"
         version: 0
       # worker-name: |
       #   request.path.room-name
@@ -31,14 +31,14 @@ routes:
         let worker = instance(worker-name);
         let user: string = request.body.user_id;
         let message: string = request.body.message;
-        worker.send(user, { body: message });
+        worker.send(user, message);
         {status: 200}
   - method: Get
     path: "/v1/inboxes/{user-id}/messages?{after}&{limit}"
     binding:
       type: wit-worker
       componentId:
-        componentId: "a9612a2e-799a-4ebc-a252-39e7bc500f1d"
+        componentId: "a31bc8aa-3489-4e5e-93c9-fb137acad781"
         version: 0
       response: |
         let user-id: string = request.path.user-id;

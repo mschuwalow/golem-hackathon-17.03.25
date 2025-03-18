@@ -1,5 +1,0 @@
-package chatroom:client;
-
-world chatroom-client {
-  export chatroom:client-exports/chatroom-client-api;
-}

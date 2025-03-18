@@ -4,7 +4,7 @@ interface chatroom-inbox-client {
   use wasi:io/poll@0.2.0.{ pollable as wasi-io-pollable };
   use wasi:clocks/wall-clock@0.2.0.{ datetime as wasi-clocks-datetime };
   use golem:rpc/types@0.1.3.{ uri as golem-rpc-uri, cancellation-token as golem-rpc-cancellation-token };
-  use chatroom:inbox-exports/chatroom-inbox-api.{ message, message-with-id };
+  use chatroom:inbox-exports/chatroom-inbox-api.{ message-with-id, room-message };
   resource future-poll-messages-result {
     subscribe: func() -> wasi-io-pollable;
     get: func() -> option<list<message-with-id>>;
@@ -14,9 +14,9 @@ interface chatroom-inbox-client {
     blocking-poll-messages: func(after: u64, batch-size: u8) -> list<message-with-id>;
     poll-messages: func(after: u64, batch-size: u8) -> future-poll-messages-result;
     schedule-poll-messages: func(after: u64, batch-size: u8, scheduled-for: wasi-clocks-datetime) -> golem-rpc-cancellation-token;
-    blocking-receive-message: func(msg: message);
-    receive-message: func(msg: message);
-    schedule-receive-message: func(msg: message, scheduled-for: wasi-clocks-datetime) -> golem-rpc-cancellation-token;
+    blocking-receive-message: func(msg: room-message);
+    receive-message: func(msg: room-message);
+    schedule-receive-message: func(msg: room-message, scheduled-for: wasi-clocks-datetime) -> golem-rpc-cancellation-token;
   }
 }
 

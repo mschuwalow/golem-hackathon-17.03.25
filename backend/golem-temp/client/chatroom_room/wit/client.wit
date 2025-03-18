@@ -4,7 +4,7 @@ interface chatroom-room-client {
   use wasi:io/poll@0.2.0.{ pollable as wasi-io-pollable };
   use wasi:clocks/wall-clock@0.2.0.{ datetime as wasi-clocks-datetime };
   use golem:rpc/types@0.1.3.{ uri as golem-rpc-uri, cancellation-token as golem-rpc-cancellation-token };
-  use chatroom:room-exports/chatroom-room-api.{ message };
+  use chatroom:room-exports/chatroom-room-api.{ message-body };
   resource chatroom-room-api {
     constructor(location: golem-rpc-uri);
     blocking-join: func(client-worker-name: string);
@@ -13,9 +13,9 @@ interface chatroom-room-client {
     blocking-leave: func(client-worker-name: string);
     leave: func(client-worker-name: string);
     schedule-leave: func(client-worker-name: string, scheduled-for: wasi-clocks-datetime) -> golem-rpc-cancellation-token;
-    blocking-send: func(client-worker-name: string, msg: message);
-    send: func(client-worker-name: string, msg: message);
-    schedule-send: func(client-worker-name: string, msg: message, scheduled-for: wasi-clocks-datetime) -> golem-rpc-cancellation-token;
+    blocking-send: func(sender: string, body: message-body);
+    send: func(sender: string, body: message-body);
+    schedule-send: func(sender: string, body: message-body, scheduled-for: wasi-clocks-datetime) -> golem-rpc-cancellation-token;
   }
 }
 

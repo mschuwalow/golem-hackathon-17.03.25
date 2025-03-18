@@ -3,10 +3,10 @@ mod bindings;
 // Import for using common lib:
 // use common_lib::example_common_function;
 use bindings::chatroom::inbox_client::chatroom_inbox_client::ChatroomInboxApi;
-use bindings::golem::api::host::{self, resolve_component_id, worker_uri, WorkerId};
+use bindings::golem::api::host::{resolve_component_id, worker_uri, WorkerId};
+use golem_rust::bindings::golem::api::host::get_self_metadata;
 use crate::bindings::exports::chatroom::room_exports::chatroom_room_api::*;
-use std::borrow::BorrowMut;
-use std::cell::RefCell;
+use crate::bindings::chatroom::common::types::RoomMessage;
 use std::collections::HashSet;
 use std::sync::{LazyLock, Mutex};
 
@@ -41,20 +41,25 @@ impl Guest for Component {
         state.connected_clients.remove(&client_worker_name);
     }
 
-    fn send(current_client_worker_name: String, msg: Message) {
+    fn send(sender: String, body: String) {
         let state = STATE.lock().unwrap();
 
+        let room_name = get_self_metadata().worker_id.worker_name;
         let client_component_id = resolve_component_id("chatroom:inbox").unwrap();
 
-        for client_worker_name in state.connected_clients.iter() {
-            if *client_worker_name != current_client_worker_name {
+        for client_name in state.connected_clients.iter() {
+            if *client_name != sender {
                 let client_uri = worker_uri(&WorkerId {
                     component_id: client_component_id.clone(),
-                    worker_name: client_worker_name.clone()
+                    worker_name: client_name.clone()
                 });
                 let client_api = ChatroomInboxApi::new(&client_uri);
-                println!("Fowarding message to {client_worker_name}");
-                client_api.receive_message(&msg);
+                println!("Fowarding message to {client_name}");
+                client_api.receive_message(&RoomMessage {
+                    sender: sender.clone(),
+                    room: room_name.clone(),
+                    body: body.clone()
+                });
             }
         }
     }
