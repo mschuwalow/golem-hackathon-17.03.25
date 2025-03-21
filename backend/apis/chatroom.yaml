@@ -11,7 +11,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: 8668db93-be43-4971-889b-6df1eff90a69
+        componentId: af0b5e86-f6d4-48bd-9dc6-d573826d80ff
         version: 0
       response: |
         let worker-name: string = request.path.room-name;
@@ -29,7 +29,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: 8668db93-be43-4971-889b-6df1eff90a69
+        componentId: af0b5e86-f6d4-48bd-9dc6-d573826d80ff
         version: 0
       response: |
         let worker-name: string = request.path.room-name;
@@ -48,7 +48,7 @@ routes:
     binding:
       type: wit-worker
       componentId:
-        componentId: cc54a0f3-5d2b-4881-aca6-01af5facd0c4
+        componentId: 0c0bc822-3a97-4370-b617-0d85b0817fe6
         version: 0
       response: |
         let user-id: string = request.path.user-id;

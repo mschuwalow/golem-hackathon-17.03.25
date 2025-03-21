@@ -1,6 +1,0 @@
-package chatroom:inbox;
-
-world chatroom-inbox {
-  import chatroom:common/types;
-  export chatroom:inbox-exports/chatroom-inbox-api;
-}
