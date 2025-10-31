@@ -19,6 +19,11 @@ wit-bindgen-rt = { workspace = true }
 
 [package.metadata.component.bindings]
 
+[package.metadata.component.bindings.with]
+"wasi:io/poll@0.2.3" = "golem_rust::wasm_rpc::wasi::io::poll"
+"wasi:clocks/wall-clock@0.2.3" = "golem_rust::wasm_rpc::wasi::clocks::wall_clock"
+"golem:rpc/types@0.2.2" = "golem_rust::wasm_rpc::golem_rpc_0_2_x::types"
+
 [package.metadata.component.target]
 path = "wit-generated"
 
@@ -26,7 +31,7 @@ path = "wit-generated"
 "chatroom:common" = { path = "wit-generated/deps/chatroom-common" }
 "wasi:io" = { path = "wit-generated/deps/io" }
 "wasi:clocks" = { path = "wit-generated/deps/clocks" }
-"golem:rpc" = { path = "wit-generated/deps/wasm-rpc" }
+"golem:rpc" = { path = "wit-generated/deps/golem-rpc" }
 "chatroom:room-exports" = { path = "wit-generated/deps/chatroom_room-exports" }
 "chatroom:room-client" = { path = "wit-generated/deps/chatroom_room-client" }
 "chatroom:inbox-exports" = { path = "wit-generated/deps/chatroom_inbox-exports" }

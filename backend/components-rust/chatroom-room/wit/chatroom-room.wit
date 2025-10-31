@@ -12,7 +12,7 @@ interface chatroom-room-api {
 }
 
 world chatroom-room {
-  import golem:api/host@1.1.5;
+  import golem:api/host@1.1.7;
 
   export chatroom-room-api;
 }

@@ -1,18 +1,80 @@
 # Schema for IDEA:
-# $schema: https://schema.golem.cloud/app/golem/1.1.1/golem.schema.json
+# $schema: https://schema.golem.cloud/app/golem/1.3.0/golem.schema.json
 # Schema for vscode-yaml
-# yaml-language-server: $schema=https://schema.golem.cloud/app/golem/1.1.1/golem.schema.json
+# yaml-language-server: $schema=https://schema.golem.cloud/app/golem/1.3.0/golem.schema.json
 
 includes:
-- common-*/golem.yaml
-- components-*/*/golem.yaml
+  - common-*/golem.yaml
+  - components-*/*/golem.yaml
 witDeps:
-- wit/deps
-- wit/unmanaged
+  - wit/deps
+  - wit/unmanaged
 dependencies:
   chatroom:inbox:
-  - target: chatroom:room
-    type: wasm-rpc
+    - target: chatroom:room
+      type: wasm-rpc
   chatroom:room:
-  - target: chatroom:inbox
-    type: wasm-rpc
+    - target: chatroom:inbox
+      type: wasm-rpc
+
+httpApi:
+  definitions:
+    chat-api:
+      version: 0.0.1
+      routes:
+        - method: OPTIONS
+          path: /v1/rooms/{room-name}/join
+          binding:
+            type: cors-preflight
+        - method: POST
+          path: /v1/rooms/{room-name}/join
+          binding:
+            type: default
+            componentName: chatroom:room
+            response: |
+              let worker-name: string = request.path.room-name;
+              let worker = instance(worker-name);
+              let user: string = request.body.user_id;
+              worker.join(user);
+              {status: 200}
+
+        - method: OPTIONS
+          path: /v1/rooms/{room-name}/messages
+          binding:
+            type: cors-preflight
+        - method: POST
+          path: /v1/rooms/{room-name}/messages
+          binding:
+            type: default
+            componentName: chatroom:room
+            response: |
+              let worker-name: string = request.path.room-name;
+              let worker = instance(worker-name);
+              let user: string = request.body.user_id;
+              let message: string = request.body.message;
+              worker.send(user, message);
+              {status: 200}
+
+        - method: OPTIONS
+          path: /v1/inboxes/{user-id}/messages?{from}&{limit}
+          binding:
+            type: cors-preflight
+        - method: GET
+          path: /v1/inboxes/{user-id}/messages?{from}&{limit}
+          binding:
+            type: default
+            componentName: chatroom:inbox
+            response: |
+              let user-id: string = request.path.user-id;
+              let worker = instance(user-id);
+              let from: u64 = request.query.from;
+              let limit: u8 = request.query.limit;
+              let response = worker.poll-messages(from, limit);
+              let body = { messages: response };
+              {status: 200, body: body }
+
+  deployments:
+    local:
+      - host: localhost:9006
+        definitions:
+          - chat-api
