@@ -2,11 +2,10 @@ mod bindings;
 
 // Import for using common lib:
 // use common_lib::example_common_function;
-use bindings::chatroom::inbox_client::chatroom_inbox_client::ChatroomInboxApi;
-use bindings::golem::api::host::{resolve_component_id, worker_uri, WorkerId};
-use golem_rust::bindings::golem::api::host::get_self_metadata;
-use crate::bindings::exports::chatroom::room_exports::chatroom_room_api::*;
 use crate::bindings::chatroom::common::types::RoomMessage;
+use crate::bindings::exports::chatroom::room_exports::chatroom_room_api::*;
+use bindings::chatroom::inbox_client::chatroom_inbox_client::ChatroomInboxApi;
+use golem_rust::bindings::golem::api::host::get_self_metadata;
 use std::collections::HashSet;
 use std::sync::{LazyLock, Mutex};
 
@@ -21,7 +20,7 @@ struct State {
 impl Default for State {
     fn default() -> Self {
         Self {
-            connected_clients: HashSet::new()
+            connected_clients: HashSet::new(),
         }
     }
 }
@@ -44,20 +43,15 @@ impl Guest for Component {
     fn send(sender: String, body: String) {
         let state = STATE.lock().unwrap();
 
-        let room_name = get_self_metadata().worker_id.worker_name;
-        let client_component_id = resolve_component_id("chatroom:inbox").unwrap();
+        let room_name = get_self_metadata().agent_id.agent_id;
 
         for client_name in state.connected_clients.iter() {
-            let client_uri = worker_uri(&WorkerId {
-                component_id: client_component_id.clone(),
-                worker_name: client_name.clone()
-            });
-            let client_api = ChatroomInboxApi::new(&client_uri);
+            let client_api = ChatroomInboxApi::new(&client_name);
             println!("Fowarding message to {client_name}");
             client_api.receive_message(&RoomMessage {
                 sender: sender.clone(),
                 room: room_name.clone(),
-                body: body.clone()
+                body: body.clone(),
             });
         }
     }
